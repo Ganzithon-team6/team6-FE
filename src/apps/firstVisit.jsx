@@ -1,21 +1,21 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import styles from "./firstVisit.styles";
+import "./firstVisit.css";
+import logo from "@/assets/react.svg";
 
 export default function FirstVisit() {
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>무엇을 하러 오셨나요?</Text>
+    <div className="first-container">
+      <img src={logo} alt="앱 로고" className="first-logo" />
 
-      <View style={styles.buttonWrapper}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>🍞 음식 나눠줄래요</Text>
-        </TouchableOpacity>
+      <div className="first-content">
+        <h1 className="first-title">무엇을 하러 오셨나요?</h1>
 
-        <TouchableOpacity style={styles.buttonSecondary}>
-          <Text style={styles.buttonTextSecondary}>🙋 음식 받고 싶어요</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        <div className="first-buttons">
+          <button className="btn primary">🍞 음식 나눠줄래요</button>
+          <button className="btn secondary">🙋 음식 받고 싶어요</button>
+        </div>
+      </div>
+    </div>
   );
 }
