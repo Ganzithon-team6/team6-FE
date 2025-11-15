@@ -1,6 +1,7 @@
+// src/components/PostCard/PostCard.jsx
 import { useState } from 'react';
 
-import './PostCard.css';
+import styles from './postCard.module.css';
 import deadlineIcon from '@/assets/icon_deadline.svg';
 import quantityIcon from '@/assets/icon_quantity.svg';
 import defaultFoodImage from '@/assets/default_food_image.png';
@@ -50,39 +51,51 @@ export default function PostCard({ post }) {
   const [imageUrl, setImageUrl] = useState(foodImgs?.[0] ?? defaultFoodImage);
 
   return (
-    <div className="post-card">
-      <div className="image-wrap">
+    <div className={styles.postCard}>
+      <div className={styles.imageWrap}>
         <img
           src={imageUrl}
           alt={foodName}
-          className="food-img"
+          className={styles.foodImg}
           onError={() => setImageUrl(defaultFoodImage)}
         />
 
         <button
-          className={`reserve-btn ${isReserved ? 'done' : ''}`}
+          className={`${styles.reserveBtn} ${
+            isReserved ? styles.reserveBtnDone : ''
+          }`}
           disabled={isReserved}
         >
           {isReserved ? '✓ 예약 완료' : '예약하기'}
         </button>
       </div>
 
-      <div className="infoBox">
-        <div className="foodName">{foodName}</div>
-        <img src={quantityIcon} alt="quantity" className="quantityIcon" />
-        <div className="quantity">{quantity}</div>
+      <div className={styles.infoBox}>
+        <div className={styles.foodName}>{foodName}</div>
+        <img
+          src={quantityIcon}
+          alt="quantity"
+          className={styles.quantityIcon}
+        />
+        <div className={styles.quantity}>{quantity}</div>
       </div>
-      <div className="deadline">
-        <img src={deadlineIcon} alt="deadline" className="deadlineIcon" />
+
+      <div className={styles.deadline}>
+        <img
+          src={deadlineIcon}
+          alt="deadline"
+          className={styles.deadlineIcon}
+        />
         <div
-          className={`dday ${
-            diffDays !== null && diffDays <= 14 ? 'urgent' : 'normal'
+          className={`${styles.dday} ${
+            diffDays !== null && diffDays <= 14 ? styles.ddayUrgent : ''
           }`}
         >
           {dDayLabel}
         </div>
       </div>
-      <div className="address">
+
+      <div className={styles.address}>
         {address} {addressDetail}
       </div>
     </div>

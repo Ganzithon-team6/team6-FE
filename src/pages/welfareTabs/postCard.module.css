@@ -1,15 +1,15 @@
-/* src/components/PostCard/PostCard.css */
+/* src/components/PostCard/PostCard.module.css */
 
-.post-card {
+.postCard {
   display: flex;
   flex-direction: column;
 }
 
-.image-wrap {
+.imageWrap {
   position: relative;
 }
 
-.food-img {
+.foodImg {
   width: 100%;
   height: 15rem;
   object-fit: cover;
@@ -17,7 +17,7 @@
 }
 
 /* 예약 버튼 */
-.reserve-btn {
+.reserveBtn {
   position: absolute;
   bottom: 12px;
   right: 12px;
@@ -31,13 +31,13 @@
   transition: transform 0.1s ease;
 }
 
-.reserve-btn.done {
+.reserveBtnDone {
   background: #f1e7df;
   color: #c67c4e;
   border: 1px solid #c67c4e;
 }
 
-.reserve-btn:active {
+.reserveBtn:active {
   transform: scale(0.95);
 }
 
@@ -51,7 +51,7 @@
 
 .foodName {
   font-size: 1.3rem;
-  color: #523316;
+  color: var(--color-primary-dark);
   flex: 1;
 }
 
@@ -85,7 +85,7 @@
   padding-bottom: 4px;
 }
 
-.dday.urgent {
+.ddayUrgent {
   font-weight: 600;
 }
 

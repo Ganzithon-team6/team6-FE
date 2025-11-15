@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import './welfare_home.css';
-import logo from '@/assets/logo.svg';
-import icon_search from '@/assets/icon_search.svg';
+import styles from './welfare_home.module.css';
 
-//API
+import logo from '@/assets/logo.svg';
+import logoText from '@/assets/logo_text.svg';
+import iconSearch from '@/assets/icon_search.svg';
+
+// API
 import { fetchPosts } from '@/api/welfareApi.js';
 
-//Components
+// Components
 import PostCard from './postCard.jsx';
 
 const SORT_OPTIONS = [
@@ -16,44 +18,48 @@ const SORT_OPTIONS = [
 ];
 
 export default function WelfareHome() {
-  const [sortType, setSortType] = useState('default'); // 현재 선택된 정렬
+  const [sortType, setSortType] = useState('default');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // sortType이 바뀔 때마다 목록 다시 불러오기
     setLoading(true);
+
     fetchPosts(sortType)
       .then((data) => {
         setPosts(data);
       })
-      .catch((err) => {
-        console.error(err);
-      })
+      .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, [sortType]);
 
   return (
-    <div className="welfare-container">
-      <div className="topHeader">
-        <img src={logo} alt="Logo" className="logo" />
-        <label className="searchBar">
-          <img src={icon_search} alt="돋보기" className="icon-search" />
+    <div className={styles.welfareContainer}>
+      {/* 상단 헤더 */}
+      <div className={styles.topHeader}>
+        <div className={styles.logoBox}>
+          <img src={logo} alt="Logo" className={styles.logo} />
+          <img src={logoText} alt="Logo Text" className={styles.logoText} />
+        </div>
+
+        <label className={styles.searchBar}>
+          <img src={iconSearch} alt="돋보기" className={styles.iconSearch} />
           <input
-            className="search-input"
+            className={styles.searchInput}
             type="text"
             placeholder="가게를 검색해보세요."
           />
         </label>
       </div>
 
-      <div className="sortFilter">
+      {/* 정렬 필터 */}
+      <div className={styles.sortFilter}>
         {SORT_OPTIONS.map((option) => (
           <button
             key={option.id}
             type="button"
-            className={`sortButton ${
-              sortType === option.id ? 'is-active' : ''
+            className={`${styles.sortButton} ${
+              sortType === option.id ? styles.sortButtonActive : ''
             }`}
             onClick={() => setSortType(option.id)}
           >
@@ -62,9 +68,11 @@ export default function WelfareHome() {
         ))}
       </div>
 
-      {loading && <p className="loading-text">불러오는 중...</p>}
+      {/* 로딩 */}
+      {loading && <p>불러오는 중...</p>}
 
-      <div className="post-list">
+      {/* 게시글 리스트 */}
+      <div className={styles.postList}>
         {posts.map((post) => (
           <PostCard key={post.uuid} post={post} />
         ))}
