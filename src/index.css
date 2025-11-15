@@ -1,6 +1,6 @@
 :root {
-  --color-primary: #d8a05a; /* 빵 느낌의 베이지 */
-  --color-primary-dark: #b48442; /* 눌렀을 때 */
-  --color-background: #fff9f1; /* 부드러운 배경 */
-  --color-text: #4a3b2a; /* 따뜻한 브라운 */
+  --color-primary: #C67C4E; /* 메인 컬러 */
+  --color-primary-dark: #E7E5E4; /* 어두운 톤 */
+  --color-background: #ffffff; /* 부드러운 배경 */
+  --font-main: 'Arimo', sans-serif; /* 기본 폰트 */
 }
