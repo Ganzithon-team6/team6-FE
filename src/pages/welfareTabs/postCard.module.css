@@ -91,5 +91,5 @@
 
 .address {
   font-size: 0.8rem;
-  color: #99a1af;
+  color: var(--color-light-gray);
 }

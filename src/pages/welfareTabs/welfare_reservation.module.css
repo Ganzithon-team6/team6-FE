@@ -27,7 +27,7 @@
   margin-left: 1rem;
 }
 
-.reservationTable {
+.reservationTableHeader {
   display: flex;
   justify-content: space-around;
   margin-top: 3rem;
@@ -40,4 +40,63 @@
   width: 100%;
   border: 1px solid var(--color-primary);
   margin-top: 1rem;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.2rem;
+  color: var(--color-gray);
+}
+
+.dateLabel {
+  font-size: 1.4rem;
+  color: var(--color-primary-dark);
+  margin-top: 1.7rem;
+  margin-bottom: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  color: var(--color-gray);
+}
+
+/* 공통 상태 버튼 */
+.statusButton {
+  border: none;
+  outline: none;
+  padding: 0.3rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition: transform 0.1s ease;
+}
+
+.statusButton:active {
+  transform: scale(0.95);
+}
+
+/* 리뷰 작성 버튼 (주황) */
+.statusTodo {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+/* 작성 완료 버튼 (연한 베이지 + 테두리) */
+.statusDone {
+  background: #fff5e6;
+  color: var(--color-primary);
+  border: 1px solid #f0c9a0;
+}
+
+.sectionDivider {
+  border: 1px solid #f3f4f6;
+  width: 95%;
 }
