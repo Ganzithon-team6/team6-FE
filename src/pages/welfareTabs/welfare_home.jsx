@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import styles from './welfare_home.module.css';
 
-import logo from '@/assets/logo.svg';
-import logoText from '@/assets/logo_text.svg';
+import logo from '@/assets/logo3.svg';
 import iconSearch from '@/assets/icon_search.svg';
-
+import icon_logout from '@/assets/icon_logout.svg';
+import { logout } from '../auth/auth.jsx';
+import { useNavigate } from 'react-router-dom';
 // API
 import { fetchPosts } from '@/api/welfareApi.js';
 
@@ -22,6 +23,9 @@ export default function WelfareHome() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
+
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -41,11 +45,7 @@ export default function WelfareHome() {
     const keyword = search.trim().toLowerCase();
 
     return posts.filter((post) => {
-      const targetText = (
-        post.foodName
-       ||
-        ''
-      ).toLowerCase();
+      const targetText = (post.foodName || '').toLowerCase();
 
       return targetText.includes(keyword);
     });
@@ -59,7 +59,15 @@ export default function WelfareHome() {
       <div className={styles.topHeader}>
         <div className={styles.logoBox}>
           <img src={logo} alt="Logo" className={styles.logo} />
-          <img src={logoText} alt="Logo Text" className={styles.logoText} />
+
+          <div className={styles.headerLogout}>
+            <img
+              src={icon_logout}
+              alt="logout"
+              className={styles.logoutIcon}
+              onClick={() => setShowLogoutModal(true)} //모달 열기
+            />
+          </div>
         </div>
 
         <label className={styles.searchBar}>
@@ -94,9 +102,7 @@ export default function WelfareHome() {
       {loading && <p>불러오는 중...</p>}
 
       {/* 검색 결과 없음 */}
-      {hasNoResult && !loading && (
-        <p>검색 결과가 없습니다.</p>
-      )}
+      {hasNoResult && !loading && <p>검색 결과가 없습니다.</p>}
 
       {/* 게시글 리스트 */}
       <div className={styles.postList}>
@@ -104,6 +110,34 @@ export default function WelfareHome() {
           <PostCard key={post.postId} post={post} />
         ))}
       </div>
+
+      {showLogoutModal && (
+        <div className={styles.logoutModalBackdrop}>
+          <div className={styles.logoutModal}>
+            <p className={styles.logoutModalMessage}>로그아웃 하시겠습니까?</p>
+            <div className={styles.logoutModalButtons}>
+              <button
+                type="button"
+                className={`${styles.logoutModalBtn} ${styles.logoutCancel}`}
+                onClick={() => setShowLogoutModal(false)}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                className={`${styles.logoutModalBtn} ${styles.logoutConfirm}`}
+                onClick={() => {
+                  logout(); // 로그인 정보 삭제
+                  setShowLogoutModal(false);
+                  navigate('/login'); // 로그인 페이지로 이동
+                }}
+              >
+                로그아웃
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
