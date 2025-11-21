@@ -41,11 +41,18 @@ export default function LoginPage() {
     const role = userType === USER_TYPES.STORE ? 'MARKET' : 'CENTER'; //api명세서 롤이름
     console.log('로그인 시도', { userType, id, password });
     try {
-      // await loginApi({ loginId: id, password, role: userType });
       setIsLoginError('');
       const data = await loginApi({ loginId: id, password, role });
-      console.log('로그인 성공', data);
-      //throw new Error('아이디 또는 비밀번호가 일치하지 않습니다.');
+      if (data.accessToken) {
+        localStorage.setItem('accessToken', data.accessToken);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+
+      // (2) 유저 저장
+      localStorage.setItem('user', JSON.stringify(data));
+
       //role에 따라 페이지 분기
       if (role === 'MARKET') {
         navigate('/store/home'); // 가게 홈

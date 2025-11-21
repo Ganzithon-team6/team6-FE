@@ -1,35 +1,31 @@
-import React from 'react';
-import IconSearch from "@/assets/icon_search.svg";
-import './searchbar.css';
+import IconSearch from '@/assets/icon_search.svg';
+import './searchBar.css';
 
 export default function SearchBar({
   value,
-  defaultValue = "",
-  placeholder = "",
+  defaultValue = '',
+  placeholder = '',
   onChange,
   onSubmit,
-  className = "",
+  className = '',
 }) {
   const controlled = value !== undefined;
-  const handleChange = (v) =>{
-    if (onChange){
-        onChange(v);
+  const handleChange = (v) => {
+    if (onChange) {
+      onChange(v);
     }
   };
 
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const input = form.querySelector("input");
-    if (input && onSubmit){
-        onSubmit(input.value);
+    const input = form.querySelector('input');
+    if (input && onSubmit) {
+      onSubmit(input.value);
     }
   };
-    return (
-    <form
-      onSubmit={handleSubmit}
-      className={`search-bar ${className}`}
-    >
+  return (
+    <form onSubmit={handleSubmit} className={`search-bar ${className}`}>
       <img src={IconSearch} alt="" className="search-bar-icon" />
 
       <input

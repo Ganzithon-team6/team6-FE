@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
@@ -7,7 +9,6 @@ function getAuthHeaders() {
     'Content-Type': 'application/json',
   };
 }
-
 
 // 가게 예약 데이터 불러오기(가게 홈)
 export async function fetchStoreData(marketId, accessToken) {
@@ -39,7 +40,6 @@ export async function fetchStoreData(marketId, accessToken) {
   return data;
 }
 
-
 // === 상품 등록 ===
 export async function createFoods(items, marketId) {
   if (!marketId) throw new Error('marketId가 필요합니다.');
@@ -50,30 +50,35 @@ export async function createFoods(items, marketId) {
     return { success: true };
   }
 
-  // 명세서에 맞는 payload로 변환
-  const payloads = items.map((it) => ({
-    name: it.foodName,
-    description: it.description,
-    count: it.quantity,
-    endTime: `${it.deadlineDate}T23:59:59`,
-    imageUrl: it.imageUrl,
-  }));
+  // FormData 생성
+  const formData = new FormData();
 
-  // 각 품목을 개별 POST 요청으로 전송
-  for (const body of payloads) {
-    const res = await fetch(
-      `${BASE_URL}/api/markets/${marketId}/products`,
-      {
-        method: 'POST',
-        headers: getAuthHeaders(), // 여기에도 토큰 없음
-        body: JSON.stringify(body),
-      }
-    );
+  // marketId가 path가 아니라 body로 필요하면 같이 append
+  formData.append('marketId', marketId);
 
-    if (res.status !== 201) {
-      throw new Error('상품 등록 실패');
+  // items를 FormData에 명세 형태로 넣기
+  items.forEach((it, idx) => {
+    // 텍스트/숫자 필드들
+    formData.append(`foods[${idx}].name`, it.foodName);
+    formData.append(`foods[${idx}].description`, it.description);
+    formData.append(`foods[${idx}].count`, String(it.quantity));
+    formData.append(`foods[${idx}].endTime`, `${it.deadlineDate}T23:59:59`);
+    formData.append(`foods[${idx}].foodDeadline`, `${it.expireDate}T23:59:59`);
+
+    // 이미지: File 그대로 append
+    if (it.imageUrl) {
+      formData.append(`foods[${idx}].image`, it.imageUrl);
+      // ↑ 백엔드가 받는 키가 image가 아니라 imageUrl이면
+      // formData.append(`foods[${idx}].imageUrl`, it.imageUrl);
+      // 로 바꿔줘
     }
-  }
+  });
 
-  return { success: true };
+  // axios POST
+  const res = await axios.post(
+    `${BASE_URL}/api/markets/${marketId}/products`,
+    formData
+  );
+
+  return res.data;
 }

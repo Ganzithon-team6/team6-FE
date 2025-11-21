@@ -9,7 +9,8 @@ export default function FoodItemForm({
   onChange,
   onRemove,
 }) {
-  const [previewUrls, setPreviewUrls] = useState([]);
+  // 단일 미리보기 URL
+  const [previewUrl, setPreviewUrl] = useState('');
 
   const handleFieldChange = (field, value) => {
     onChange({
@@ -18,29 +19,28 @@ export default function FoodItemForm({
     });
   };
 
-  //이미지
+  // 이미지: 단일 File만 저장
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files || []);
+    const file = e.target.files?.[0] || null;
+
     onChange({
       ...item,
-      images: files,
+      imageUrl: file, // 배열이 아니라 File 하나
     });
   };
 
-  //미리보기용 변환
+  // 미리보기 URL 생성/해제
   useEffect(() => {
-    if (!item.images || item.images.length === 0) {
-      setPreviewUrls([]);
+    if (!item.imageUrl) {
+      setPreviewUrl('');
       return;
     }
 
-    const urls = item.images.map((file) => URL.createObjectURL(file));
-    setPreviewUrls(urls);
+    const url = URL.createObjectURL(item.imageUrl);
+    setPreviewUrl(url);
 
-    return () => {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [item.images]);
+    return () => URL.revokeObjectURL(url);
+  }, [item.imageUrl]);
 
   return (
     <section className="food-item">
@@ -58,23 +58,21 @@ export default function FoodItemForm({
         )}
       </div>
 
-      {/*음식 이미지 업로드 / 미리보기*/}
       <div className="food-item-body">
+        {/* 음식 이미지 업로드 / 미리보기 */}
         <div className="field">
           <label className="field-label">음식 사진</label>
           <div className="food-photo-box">
-            {/* 미리보기 썸네일들 */}
-            {previewUrls.length > 0 && (
+            {/* 단일 미리보기 */}
+            {previewUrl && (
               <div className="food-photo-preview-list">
-                {previewUrls.map((url, idx) => (
-                  <div key={idx} className="food-photo-preview-item">
-                    <img
-                      src={url}
-                      alt={`선택한 이미지 ${idx + 1}`}
-                      className="food-photo-preview-img"
-                    />
-                  </div>
-                ))}
+                <div className="food-photo-preview-item">
+                  <img
+                    src={previewUrl}
+                    alt="선택한 이미지"
+                    className="food-photo-preview-img"
+                  />
+                </div>
               </div>
             )}
 
@@ -83,14 +81,12 @@ export default function FoodItemForm({
               <input
                 type="file"
                 accept="image/*"
-                multiple
                 onChange={handleImageChange}
                 hidden
               />
-
               <img src={uploadIcon} alt="업로드 아이콘" />
               <span className="upload-text">
-                {previewUrls.length > 0 ? '이미지 변경' : '이미지 선택'}
+                {previewUrl ? '이미지 변경' : '이미지 선택'}
               </span>
             </label>
           </div>
@@ -103,7 +99,7 @@ export default function FoodItemForm({
             className="field-input"
             type="text"
             placeholder="예: 식빵 & 크루아상"
-            value={item.foodName}
+            value={item.foodName || ''}
             onChange={(e) => handleFieldChange('foodName', e.target.value)}
           />
         </div>
@@ -115,7 +111,7 @@ export default function FoodItemForm({
             className="field-input"
             type="text"
             placeholder="예: 오후 3시에 구운 따끈따끈한 빵"
-            value={item.description}
+            value={item.description || ''}
             onChange={(e) => handleFieldChange('description', e.target.value)}
           />
         </div>
@@ -128,16 +124,21 @@ export default function FoodItemForm({
               type="button"
               className="qty-btn"
               onClick={() =>
-                handleFieldChange('quantity', Math.max(1, item.quantity - 1))
+                handleFieldChange(
+                  'quantity',
+                  Math.max(1, (item.quantity || 1) - 1)
+                )
               }
             >
               -
             </button>
-            <span className="qty-value">{item.quantity}</span>
+            <span className="qty-value">{item.quantity || 1}</span>
             <button
               type="button"
               className="qty-btn"
-              onClick={() => handleFieldChange('quantity', item.quantity + 1)}
+              onClick={() =>
+                handleFieldChange('quantity', (item.quantity || 1) + 1)
+              }
             >
               +
             </button>

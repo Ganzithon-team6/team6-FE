@@ -41,11 +41,7 @@ export default function WelfareHome() {
     const keyword = search.trim().toLowerCase();
 
     return posts.filter((post) => {
-      const targetText = (
-        post.foodName
-       ||
-        ''
-      ).toLowerCase();
+      const targetText = (post.foodName || '').toLowerCase();
 
       return targetText.includes(keyword);
     });
@@ -94,14 +90,12 @@ export default function WelfareHome() {
       {loading && <p>불러오는 중...</p>}
 
       {/* 검색 결과 없음 */}
-      {hasNoResult && !loading && (
-        <p>검색 결과가 없습니다.</p>
-      )}
+      {hasNoResult && !loading && <p>검색 결과가 없습니다.</p>}
 
       {/* 게시글 리스트 */}
       <div className={styles.postList}>
         {filteredPosts.map((post) => (
-          <PostCard key={post.postId} post={post} />
+          <PostCard key={post.productId} post={post} />
         ))}
       </div>
     </div>

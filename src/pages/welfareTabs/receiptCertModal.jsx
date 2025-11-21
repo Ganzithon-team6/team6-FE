@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import styles from './receiptCertModal.module.css';
 import UploadIcon from '@/assets/icon_upload.svg';
 
+import { checkReceipt } from '@/api/welfareApi.js';
+
 export default function ReceiptCertModal({ open, onClose, onNext }) {
   const [isVisible, setIsVisible] = useState(open); // DOM에 붙어있는지 여부
   const [isClosing, setIsClosing] = useState(false);
