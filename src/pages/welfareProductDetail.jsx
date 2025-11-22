@@ -5,7 +5,7 @@ import styles from './welfareDetail.module.css';
 import backIcon from '@/assets/icon_back.svg';
 import defaultFoodImage from '@/assets/default_food_image.png';
 
-import { fetchCenterProductDetail} from '@/api/welfareApi';
+import { fetchCenterProductDetail } from '@/api/welfareApi';
 
 import FoodInfoSection from './welfareDetail/foodInfoSection';
 import ReviewSection from './welfareDetail/reviewSection';
@@ -37,14 +37,18 @@ export default function WelfareDetail() {
 
   if (loading) return <div className={styles.detailPage}>불러오는 중...</div>;
   if (errorMsg || !detail)
-    return <div className={styles.detailPage}>{errorMsg || '데이터가 없습니다.'}</div>;
+    return (
+      <div className={styles.detailPage}>
+        {errorMsg || '데이터가 없습니다.'}
+      </div>
+    );
 
   return (
     <div className={styles.detailPage}>
       {/* 상단 헤더 */}
       <header className={styles.header}>
         <button className={styles.backButton} onClick={() => navigate(-1)}>
-          <img src={backIcon} />
+          <img src={backIcon} alt="뒤로가기" />
         </button>
 
         <div className={styles.headerText}>
@@ -60,7 +64,14 @@ export default function WelfareDetail() {
         <img
           src={detail.imageUrl || defaultFoodImage}
           className={styles.mainImage}
-          alt={detail.productName}
+          alt={detail.productName || '상품 이미지'}
+          onError={(e) => {
+            // 깨졌을 때 기본 이미지로 교체 + 무한 onError 방지
+            if (e.currentTarget.src !== defaultFoodImage) {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = defaultFoodImage;
+            }
+          }}
         />
       </div>
 
